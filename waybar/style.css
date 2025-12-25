@@ -1,6 +1,6 @@
 * {
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: "FiraCode Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Symbols Nerd Font', "FiraCode Nerd Font", Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 
@@ -48,9 +48,8 @@ button:hover,
 #bluetooth:hover {
     background: #282828;
     font-size: inherit;
-    box-shadow: inherit;
     text-shadow: inherit;
-    border-bottom: 3px solid #64727D;
+    box-shadow: inset 0 -2px #928374;
 }
 
 #workspaces {
@@ -60,7 +59,7 @@ button:hover,
 }
 
 #workspaces button {
-    padding: 0 3px;
+    padding: 0 6px;
     border: 1px solid transparent;
     background-color: transparent;
     color: #D6E4E5;
@@ -68,15 +67,15 @@ button:hover,
 
 #workspaces button:hover,
 #workspaces button:focus {
-    border-bottom: 1px solid #EFF5F5;
+    box-shadow: inset 0 -3px #EFF5F5;
 }
 
 #workspaces button.active {
-    border-bottom: 2px solid #D6E4E5;
+    box-shadow: inset 0 -3px #fbf1c7;
 }
 
 #workspaces button.focused {
-    background-color: #64727D;
+    background-color: #928374;
 }
 
 #workspaces button.urgent {
@@ -84,7 +83,7 @@ button:hover,
 }
 
 #mode {
-    background-color: #64727D;
+    background-color: #928374;
     box-shadow: inset 0 -3px #ffffff;
 }
 
@@ -230,7 +229,7 @@ label:focus {
 }
 
 #tray {
-    background-color: #2980b9;
+    background-color: #fbf1c7;
 }
 
 #tray>.passive {

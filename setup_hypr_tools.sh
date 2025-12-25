@@ -1,5 +1,14 @@
 #!/bin/bash
 
-sudo pacman -S hyprpaper hyprpicker hyprland-guiutils hyprpolkitagent hyprland-qt-support swaync
+sudo pacman -S hyprpaper xdg-desktop-portal-hyprland hyprpicker hyprland-guiutils hyprpolkitagent hyprland-qt-support libnotify mako
 
-ln -sf ~/.config/hyp-env/hypr ~/.config/hypr
+yay -S flameshot-gui
+
+ln -sf ~/.config/hyp-env/hypr ~/.config/
+ln -sf ~/.config/hyp-env/mako ~/.config/
+
+systemctl --user stop xdg-desktop-portal
+systemctl --user stop xdg-desktop-portal-hyprland
+
+systemctl --user start xdg-desktop-portal-hyprland
+systemctl --user start xdg-desktop-portal
