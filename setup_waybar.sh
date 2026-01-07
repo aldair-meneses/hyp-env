@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo pacman -S waybar bluetui imapala
+sudo pacman -S waybar bluetui impala
 
 mkdir -p ~/.config/waybar
 

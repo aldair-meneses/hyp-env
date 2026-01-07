@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sudo pacman -S hyprpaper xdg-desktop-portal-hyprland hyprpicker hyprland-guiutils hyprpolkitagent hyprland-qt-support libnotify mako
+sudo pacman -S kitty bluez hyprpaper xdg-desktop-portal-hyprland hyprpicker hyprland-guiutils hyprpolkitagent hyprland-qt-support libnotify mako
 
-yay -S flameshot-gui
+yay -S flameshot-git
 
 ln -sf ~/.config/hyp-env/hypr ~/.config/
 ln -sf ~/.config/hyp-env/mako ~/.config/
