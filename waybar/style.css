@@ -16,15 +16,6 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
 window#waybar.termite {
     background-color: #3F3F3F;
 }
@@ -105,7 +96,7 @@ button:hover,
 #power-profiles-daemon,
 #bluetooth,
 #mpd {
-    padding: 0 10px 0 10px;
+    padding: 0 15px 0 10px;
     min-width: 30px;
     margin-left: 5px;
     margin-right: 5px;
