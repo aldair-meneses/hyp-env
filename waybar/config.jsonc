@@ -152,26 +152,45 @@
         ]
     },
     "battery": {
-        "states": {
-            "good": 70,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "x"
-        ]
+       "format": "{capacity}% {icon}",
+       "format-discharging": "{capacity}% {icon}",
+       "format-charging": "{capacity}% {icon}",
+       "format-plugged": "",
+       "format-icons": {
+         "charging": [
+           "󰢜",
+           "󰂆",
+           "󰂇",
+           "󰂈",
+           "󰢝",
+           "󰂉",
+           "󰢞",
+           "󰂊",
+           "󰂋",
+           "󰂅"
+         ],
+         "default": [
+           "󰁺",
+           "󰁻",
+           "󰁼",
+           "󰁽",
+           "󰁾",
+           "󰁿",
+           "󰂀",
+           "󰂁",
+           "󰂂",
+           "󰁹"
+         ]
+       },
+       "format-full": "󰂅",
+       "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}% {time}",
+       "format-alt": "{time} {icon}",
+       "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+       "interval": 5,
+       "states": {
+         "warning": 20,
+         "critical": 10
+       }
     },
     "battery#bat2": {
         "bat": "BAT2"
