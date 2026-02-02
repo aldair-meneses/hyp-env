@@ -1,6 +1,9 @@
 #!/bin/bash
 
-sudo pacman -S kitty bluez hyprpaper xdg-desktop-portal-hyprland hyprpicker hyprland-guiutils hyprpolkitagent hyprland-qt-support libnotify mako bluez bluez-utils alsa-utils alsa-card-profiles os-prober
+sudo pacman -S kitty bluez hyprpaper xdg-desktop-portal-hyprland \
+    hyprpicker hyprland-guiutils hyprpolkitagent \
+    hyprland-qt-support libnotify mako bluez bluez-utils alsa-utils \
+    alsa-card-profiles os-prober hyprlock
 
 sudo systemctl enable bluetooth
 
