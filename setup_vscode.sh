@@ -1,3 +1,5 @@
 #!/bin/bash
 
-cp hyp-env/vscode/settings.json ~/.config/Code\ \-\ \OSS/User/settings.json
+sudo pacman -S visual-studio-code-bin
+
+#cp ./vscode/settings.json ~/.config/Code\ \-\ \OSS/User/settings.json
