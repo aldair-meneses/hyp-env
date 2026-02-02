@@ -3,7 +3,7 @@
 sudo pacman -S kitty bluez hyprpaper xdg-desktop-portal-hyprland \
     hyprpicker hyprland-guiutils hyprpolkitagent \
     hyprland-qt-support libnotify mako bluez bluez-utils alsa-utils \
-    alsa-card-profiles os-prober hyprlock
+    alsa-card-profiles os-prober hyprlock ripgrep fzf eza
 
 sudo systemctl enable bluetooth
 
