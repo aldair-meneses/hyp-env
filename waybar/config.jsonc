@@ -23,7 +23,7 @@
         "memory",
         "cpu",
         "battery",
-        "custom/power",
+        "custom/power"
     ],
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -220,7 +220,7 @@
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "on-click": "kitty --title 'impala' -e impala"
+        "on-click": "kitty --title 'gazelle' -e gazelle"
     },
     "pulseaudio": {
         "scroll-step": 5, // %, can be a float
