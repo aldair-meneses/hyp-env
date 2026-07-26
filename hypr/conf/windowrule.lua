@@ -12,5 +12,12 @@ hl.window_rule({
     pin = true,
     monitor = "DP-1",
     move = { 0, 0 },
-    size = { "(monitor_w*2)", "(monitor_h)" },
+    -- size = { "(monitor_w*2)", "(monitor_h)" },
+})
+
+-- Noctalia Settings
+hl.window_rule({
+    match = { class = "dev.noctalia.Noctalia" },
+    float = true,
+    size = { 1080, 920 },
 })
