@@ -1,0 +1,3 @@
+# Noctalia plugin payloads are installed/reinstallable via the plugin manager
+# (see noctalia/plugins.json for the enabled sources) - too large/binary to track.
+noctalia/plugins/
