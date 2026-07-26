@@ -1,3 +1,7 @@
 # Noctalia plugin payloads are installed/reinstallable via the plugin manager
 # (see noctalia/plugins.json for the enabled sources) - too large/binary to track.
-noctalia/plugins/
+# Note: can't ignore noctalia/plugins/ itself, git won't recurse into an
+# excluded directory so the settings.json negation below wouldn't apply.
+noctalia/plugins/*/*
+# ...but each plugin's own settings.json is real user config, so track those.
+!noctalia/plugins/*/settings.json
