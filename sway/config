@@ -1,0 +1,10 @@
+include conf.d/environment
+include conf.d/input
+include conf.d/monitor
+include conf.d/decoration
+include conf.d/workspace
+include conf.d/window
+include conf.d/windowrule
+include conf.d/misc
+include conf.d/keybinding
+include conf.d/autostart

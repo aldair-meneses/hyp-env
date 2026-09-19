@@ -1,0 +1,8 @@
+exec systemctl --user enable --now ssh-agent.service
+exec libinput-gestures-setup start
+exec noctalia
+exec sleep 5 && /opt/forticlient/fortitraylauncher
+exec flameshot
+exec mako
+exec swaybg -i ~/Imagens/Wallpapers/gruv.png -m fill
+exec nm-applet

@@ -1,0 +1,12 @@
+input type:keyboard {
+    xkb_layout br
+    xkb_model abnt
+}
+
+input type:touchpad {
+    natural_scroll disabled
+}
+
+input "REPLACE_WITH_IDENTIFIER:epic-mouse-v1" {
+    pointer_accel -0.5
+}

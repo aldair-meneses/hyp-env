@@ -1,16 +1,11 @@
 #!/bin/bash
 
-sudo pacman -S kitty bluez hyprpaper xdg-desktop-portal-hyprland \
-    hyprpicker hyprland-guiutils hyprpolkitagent \
-    hyprland-qt-support libnotify mako bluez bluez-utils alsa-utils \
-    alsa-card-profiles os-prober hyprlock ripgrep fzf eza keepassxc
+./setup_common_tools.sh
 
-sudo systemctl enable bluetooth
-
-yay -S flameshot-git
+sudo pacman -S hyprpaper xdg-desktop-portal-hyprland hyprpicker \
+    hyprland-guiutils hyprpolkitagent hyprland-qt-support hyprlock
 
 ln -sf ~/.config/hyp-env/hypr ~/.config/
-ln -sf ~/.config/hyp-env/mako ~/.config/
 
 systemctl --user stop xdg-desktop-portal
 systemctl --user stop xdg-desktop-portal-hyprland
