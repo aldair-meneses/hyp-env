@@ -14,9 +14,9 @@ ln -sf ~/.config/hyp-env/sway/uwsm-env-sway ~/.config/uwsm/env-sway
 
 libinput-gestures-setup autostart
 
-mkdir -p ~/.local/share/wayland-sessions
-if [ ! -f ~/.local/share/wayland-sessions/sway-uwsm.desktop ]; then
-    cat > ~/.local/share/wayland-sessions/sway-uwsm.desktop <<'EOF'
+if [ ! -f /usr/local/share/wayland-sessions/sway-uwsm.desktop ]; then
+    sudo mkdir -p /usr/local/share/wayland-sessions
+    sudo tee /usr/local/share/wayland-sessions/sway-uwsm.desktop > /dev/null <<'EOF'
 [Desktop Entry]
 Name=Sway (uwsm-managed)
 Comment=An i3-compatible tiling Wayland compositor
