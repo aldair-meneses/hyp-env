@@ -5,6 +5,8 @@ input type:keyboard {
 
 input type:touchpad {
     natural_scroll disabled
+    tap enabled
+    tap_button_map lrm
 }
 
 input "REPLACE_WITH_IDENTIFIER:epic-mouse-v1" {
