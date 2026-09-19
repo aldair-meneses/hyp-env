@@ -11,33 +11,29 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/espanso/espanso/dev/schemas/match.schema.json
 
 matches:
-  # Uppercase the clipboard. Copy the text first, then type !!upper
+  # Uppercase the clipboard. Copy the text first, then type ;;upper
   # Use this one for pasted text: espanso cannot see a Ctrl+V, only keystrokes.
-  - trigger: "!!upper"
+  - trigger: ";;upper"
     replace: "{{upper}}"
     vars:
-      - name: clip
-        type: clipboard
       - name: upper
         type: shell
         params:
-          cmd: "printf '%s' \"$ESPANSO_CLIP\" | python3 -c 'import sys; sys.stdout.write(sys.stdin.read().upper())'"
+          cmd: "wl-paste --no-newline | python3 -c 'import sys; sys.stdout.write(sys.stdin.read().upper())'"
 
-  # Sentence case the clipboard. Copy the text first, then type !!sent
+  # Sentence case the clipboard. Copy the text first, then type ;;sent
   # CACHE PERSISTENTE NOS ASSETS - CLOUDFLARE -> Cache persistente nos assets cloudflare
-  - trigger: "!!sent"
+  - trigger: ";;sent"
     replace: "{{sentence}}"
     vars:
-      - name: clip
-        type: clipboard
       - name: sentence
         type: shell
         params:
-          cmd: "printf '%s' \"$ESPANSO_CLIP\" | python3 ~/.config/espanso/scripts/sentence_case.py"
+          cmd: "wl-paste --no-newline | python3 ~/.config/espanso/scripts/sentence_case.py"
 
-  # Uppercase text typed inline: !!caps(some text) -> SOME TEXT
-  # Separate trigger because a bare "!!uper" would fire before you could type the text.
-  - regex: '!!caps\((?P<text>.*?)\)'
+  # Uppercase text typed inline: ;;caps(some text) -> SOME TEXT
+  # Separate trigger because a bare ";;uper" would fire before you could type the text.
+  - regex: ';;caps\((?P<text>.*?)\)'
     replace: "{{upper}}"
     vars:
       - name: upper
