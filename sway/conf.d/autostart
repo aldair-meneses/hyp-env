@@ -1,4 +1,5 @@
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec uwsm finalize
 exec systemctl --user enable --now ssh-agent.service
 exec libinput-gestures-setup start
 exec noctalia
