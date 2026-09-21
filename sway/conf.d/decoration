@@ -1,7 +1,7 @@
-gaps inner 5
-gaps outer 10
+gaps inner 4
+gaps outer 0
 
-default_border pixel 1
-default_floating_border pixel 1
+default_border pixel 2
+default_floating_border pixel 2
 
 floating_modifier $mod normal
