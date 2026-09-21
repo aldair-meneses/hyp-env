@@ -1,7 +1,8 @@
 output HDMI-A-1 {
-    resolution 1920x1080@120Hz
+    resolution 1920x1080@144Hz
     position 0,0
     scale 1
+    adaptive_sync off
 }
 
 output eDP-1 {
