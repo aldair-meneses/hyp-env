@@ -1,0 +1,10 @@
+{
+  "tooltip": {
+    "cpu": "CPU: {count}%"
+  },
+  "settings": {
+    "title": "RunCat Settings",
+    "idleThreshold": "Idle Threshold (%)",
+    "thresholdHint": "CPU usage below this value will show idle cat animation"
+  }
+}

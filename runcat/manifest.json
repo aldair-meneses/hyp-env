@@ -1,0 +1,23 @@
+{
+  "id": "runcat",
+  "name": "RunCat Widget",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "aldrick",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Gato que corre na barra baseado no uso da CPU",
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "animationEnabled": true,
+      "idleThreshold": 2.0
+    }
+  }
+}
