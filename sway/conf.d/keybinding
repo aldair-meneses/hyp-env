@@ -1,15 +1,17 @@
-set $ipc noctalia msg
+set $ipc dms ipc call
 
-bindsym $mod+space exec $ipc panel-toggle launcher
-bindsym $mod+Shift+l exec $ipc panel-toggle clipboard
-bindsym $mod+s exec $ipc panel-toggle control-center
-bindsym $mod+comma exec $ipc settings-toggle
+bindsym $mod+space exec $ipc spotlight toggle
+bindsym $mod+Shift+l exec $ipc clipboard toggle
+bindsym $mod+s exec $ipc control-center toggle
+bindsym $mod+comma exec $ipc settings toggle
+bindsym $mod+n exec $ipc notifications toggle
+bindsym $mod+Escape exec $ipc powermenu toggle
 
-bindsym --locked XF86AudioRaiseVolume exec $ipc volume-up
-bindsym --locked XF86AudioLowerVolume exec $ipc volume-down
-bindsym --locked XF86AudioMute exec $ipc volume-mute
-bindsym XF86MonBrightnessUp exec $ipc brightness-up
-bindsym XF86MonBrightnessDown exec $ipc brightness-down
+bindsym --locked XF86AudioRaiseVolume exec $ipc audio increment 3
+bindsym --locked XF86AudioLowerVolume exec $ipc audio decrement 3
+bindsym --locked XF86AudioMute exec $ipc audio mute
+bindsym XF86MonBrightnessUp exec $ipc brightness increment 5
+bindsym XF86MonBrightnessDown exec $ipc brightness decrement 5
 
 bindsym $mod+Return exec $terminal
 bindsym $mod+q kill
@@ -20,8 +22,8 @@ bindsym $mod+b splith
 bindsym $mod+v splitv
 bindsym $mod+w layout toggle tabbed split
 bindsym $mod+Shift+s layout toggle stacking split
-bindsym $mod+l exec $ipc session lock
-bindsym $mod5+Tab exec $ipc panel-toggle clipboard
+bindsym $mod+l exec $ipc lock lock
+bindsym $mod5+Tab exec $ipc clipboard toggle
 
 bindsym Print exec flameshot gui
 bindsym $mod+Shift+Print exec flameshot launcher

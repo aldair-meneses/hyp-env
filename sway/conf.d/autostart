@@ -2,7 +2,7 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 exec uwsm finalize
 exec systemctl --user enable --now ssh-agent.service
 exec libinput-gestures-setup start
-exec noctalia
+exec dms run
 exec sleep 5 && /opt/forticlient/fortitraylauncher
 exec flameshot
 exec swaybg -i ~/Imagens/Wallpapers/gruv.png -m fill
