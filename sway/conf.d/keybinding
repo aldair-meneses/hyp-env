@@ -20,12 +20,13 @@ bindsym $mod+t floating toggle
 bindsym $mod+f fullscreen toggle
 bindsym $mod+b splith
 bindsym $mod+v splitv
+bindsym $mod+Shift+v layout toggle split
 bindsym $mod+w layout toggle tabbed split
 bindsym $mod+Shift+s layout toggle stacking split
 bindsym $mod+l exec $ipc lock lock
 bindsym $mod5+Tab exec $ipc clipboard toggle
 
-bindsym Print exec flameshot gui
+bindsym Print exec flameshot screen -n 0 -e
 bindsym $mod+Shift+Print exec flameshot launcher
 
 bindsym $mod+Left focus left

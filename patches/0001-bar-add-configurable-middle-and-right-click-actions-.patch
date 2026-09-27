@@ -1,0 +1,375 @@
+From 8f40742d6891b9cfd7a6eba1d18f64d86f3a2e08 Mon Sep 17 00:00:00 2001
+From: aldair-meneses <aldair.meneses@protonmail.com>
+Date: Sat, 26 Sep 2026 01:31:49 -0300
+Subject: [PATCH] bar: add configurable middle and right click actions on empty
+ space
+
+Revives PR 2710 using in-process PopoutService toggles per review, extended
+with a right click action and a follow-mouse option for anchored popouts.
+---
+ quickshell/Common/settings/SettingsSpec.js    |   3 +
+ quickshell/Modules/DankBar/BarSurface.qml     |   5 +-
+ quickshell/Modules/DankBar/DankBarBody.qml    |  59 ++++++++-
+ quickshell/Modules/Settings/DankBarTab.qml    |  83 +++++++++++++
+ .../translations/settings_search_index.json   | 117 ++++++++++++++++++
+ 5 files changed, 265 insertions(+), 2 deletions(-)
+
+diff --git a/quickshell/Common/settings/SettingsSpec.js b/quickshell/Common/settings/SettingsSpec.js
+index 75e66d8d..1d6bd34d 100644
+--- a/quickshell/Common/settings/SettingsSpec.js
++++ b/quickshell/Common/settings/SettingsSpec.js
+@@ -1351,6 +1351,9 @@ var LOCAL_SPEC = {
+                 scrollEnabled: true,
+                 scrollXBehavior: "column",
+                 scrollYBehavior: "workspace",
++                middleClickAction: "none",
++                rightClickAction: "none",
++                clickActionFollowMouse: false,
+                 shadowIntensity: 0,
+                 shadowOpacity: 60,
+                 shadowColorMode: "default",
+diff --git a/quickshell/Modules/DankBar/BarSurface.qml b/quickshell/Modules/DankBar/BarSurface.qml
+index 472ab484..e6f506e7 100644
+--- a/quickshell/Modules/DankBar/BarSurface.qml
++++ b/quickshell/Modules/DankBar/BarSurface.qml
+@@ -171,10 +171,13 @@ Item {
+     }
+ 
+     MouseArea {
++        id: emptySurfaceClickArea
+         anchors.fill: parent
+         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+         z: -999
+-        onClicked: {
++        onClicked: mouse => {
++            if (root.barWindow.handleEmptyBarClick(mouse.button, emptySurfaceClickArea, mouse.x, mouse.y))
++                return;
+             const activePopout = PopoutManager.getActivePopout(root.barWindow.screen);
+             if (activePopout) {
+                 if (activePopout.dashVisible !== undefined) {
+diff --git a/quickshell/Modules/DankBar/DankBarBody.qml b/quickshell/Modules/DankBar/DankBarBody.qml
+index 668d1de9..171bff0c 100644
+--- a/quickshell/Modules/DankBar/DankBarBody.qml
++++ b/quickshell/Modules/DankBar/DankBarBody.qml
+@@ -125,6 +125,58 @@ Item {
+             NetworkService.scanWifi();
+     }
+ 
++    function runBarClickAction(action, clickItem, clickX, clickY) {
++        switch (action) {
++        case "control-center":
++            if ((barConfig?.clickActionFollowMouse ?? false) && triggerControlCenterAt(clickItem, clickX, clickY))
++                return true;
++            triggerControlCenter();
++            return true;
++        case "spotlight":
++            PopoutService.toggleDankLauncherV2();
++            return true;
++        case "close-window":
++            ToplevelManager.activeToplevel?.close();
++            return true;
++        case "settings":
++            PopoutService.toggleSettings();
++            return true;
++        }
++        return false;
++    }
++
++    function handleEmptyBarClick(button, clickItem, clickX, clickY) {
++        if (button === Qt.MiddleButton)
++            return runBarClickAction(barConfig?.middleClickAction ?? "none", clickItem, clickX, clickY);
++        if (button === Qt.RightButton)
++            return runBarClickAction(barConfig?.rightClickAction ?? "none", clickItem, clickX, clickY);
++        return false;
++    }
++
++    function triggerControlCenterAt(clickItem, clickX, clickY) {
++        const loader = PopoutService.controlCenterLoader;
++        if (!loader)
++            return false;
++        loader.active = true;
++        if (!loader.item)
++            return false;
++        const popout = PopoutService.controlCenterPopout ?? loader.item;
++        const context = topBarContent.surfaceContext;
++        const point = context?.screenPoint(clickItem, clickX, clickY) ?? null;
++        if (popout?.setTriggerPosition && point) {
++            const thickness = context.thickness;
++            const spacing = barConfig?.spacing ?? 4;
++            const position = barConfig?.position ?? 0;
++            const trigger = SettingsData.getPopupTriggerPosition(point, screen, thickness, 1, spacing, position, barConfig);
++            popout.setTriggerPosition(trigger.x, trigger.y, trigger.width, "center", screen, position, thickness, spacing, barConfig, clickItem);
++        }
++        loader.item.triggerScreen = screen;
++        loader.item.toggle();
++        if (loader.item.shouldBeVisible && NetworkService.wifiEnabled)
++            NetworkService.scanWifi();
++        return true;
++    }
++
+     function dashSectionItem(section) {
+         const vertical = barWindow.isVertical;
+         switch (section) {
+@@ -963,10 +1015,15 @@ Item {
+                     }
+ 
+                     MouseArea {
++                        id: emptyBarClickArea
+                         anchors.fill: parent
+                         z: -2
+                         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+-                        onClicked: PopoutManager.dismissAllForScreen(barWindow.screen?.name)
++                        onClicked: mouse => {
++                            if (barWindow.handleEmptyBarClick(mouse.button, emptyBarClickArea, mouse.x, mouse.y))
++                                return;
++                            PopoutManager.dismissAllForScreen(barWindow.screen?.name);
++                        }
+                     }
+ 
+                     BarScrollArea {
+diff --git a/quickshell/Modules/Settings/DankBarTab.qml b/quickshell/Modules/Settings/DankBarTab.qml
+index c655b80d..76b1f578 100644
+--- a/quickshell/Modules/Settings/DankBarTab.qml
++++ b/quickshell/Modules/Settings/DankBarTab.qml
+@@ -571,6 +571,89 @@ Item {
+             }
+         }
+ 
++        SettingsCard {
++            iconName: "mouse"
++            title: I18n.tr("Click actions")
++            settingKey: "barMouseClickAction"
++            tags: ["bar", "click", "middle", "right", "mouse", "control center", "launcher", "settings"]
++            visible: (bar.selectedBarConfig?.enabled ?? false) && !bar.selectedBarIsIsland
++
++            SettingsToggleRow {
++                text: I18n.tr("Follow mouse")
++                description: I18n.tr("Anchored popouts open at the cursor instead of their widget")
++                settingKey: "barClickActionFollowMouse"
++                tags: ["bar", "click", "mouse", "cursor", "position", "anchor", "popout"]
++                resetStore: bar
++                resetKeys: ["clickActionFollowMouse"]
++                checked: bar.selectedBarConfig?.clickActionFollowMouse ?? false
++                onToggled: checked => SettingsData.updateBarConfig(bar.selectedBarId, {
++                        clickActionFollowMouse: checked
++                    })
++            }
++
++            SettingsDropdownRow {
++                text: I18n.tr("Middle click")
++                description: I18n.tr("Choose what middle-clicking empty bar space does")
++                settingKey: "barMiddleClickAction"
++                tags: ["bar", "middle", "click", "mouse", "control center", "launcher", "settings", "close"]
++                resetStore: bar
++                resetKeys: ["middleClickAction"]
++                options: [I18n.tr("None", "bar click action"), I18n.tr("Toggle Control Center", "bar click action"), I18n.tr("Toggle Launcher", "bar click action"), I18n.tr("Close Active Window", "bar click action"), I18n.tr("Toggle Settings", "bar click action")]
++                dropdownWidth: Theme.smallBreakpoint / 2
++                currentValue: {
++                    switch (bar.selectedBarConfig?.middleClickAction ?? "none") {
++                    case "control-center":
++                        return options[1];
++                    case "spotlight":
++                        return options[2];
++                    case "close-window":
++                        return options[3];
++                    case "settings":
++                        return options[4];
++                    default:
++                        return options[0];
++                    }
++                }
++                onValueChanged: value => {
++                    const actions = ["none", "control-center", "spotlight", "close-window", "settings"];
++                    SettingsData.updateBarConfig(bar.selectedBarId, {
++                        middleClickAction: actions[options.indexOf(value)] ?? "none"
++                    });
++                }
++            }
++
++            SettingsDropdownRow {
++                text: I18n.tr("Right click")
++                description: I18n.tr("Choose what right-clicking empty bar space does")
++                settingKey: "barRightClickAction"
++                tags: ["bar", "right", "click", "mouse", "control center", "launcher", "settings", "close"]
++                resetStore: bar
++                resetKeys: ["rightClickAction"]
++                options: [I18n.tr("None", "bar click action"), I18n.tr("Toggle Control Center", "bar click action"), I18n.tr("Toggle Launcher", "bar click action"), I18n.tr("Close Active Window", "bar click action"), I18n.tr("Toggle Settings", "bar click action")]
++                dropdownWidth: Theme.smallBreakpoint / 2
++                currentValue: {
++                    switch (bar.selectedBarConfig?.rightClickAction ?? "none") {
++                    case "control-center":
++                        return options[1];
++                    case "spotlight":
++                        return options[2];
++                    case "close-window":
++                        return options[3];
++                    case "settings":
++                        return options[4];
++                    default:
++                        return options[0];
++                    }
++                }
++                onValueChanged: value => {
++                    const actions = ["none", "control-center", "spotlight", "close-window", "settings"];
++                    SettingsData.updateBarConfig(bar.selectedBarId, {
++                        rightClickAction: actions[options.indexOf(value)] ?? "none"
++                    });
++                }
++            }
++        }
++
+         SettingsCard {
+             iconName: "border_outer"
+             title: I18n.tr("Frame")
+diff --git a/quickshell/translations/settings_search_index.json b/quickshell/translations/settings_search_index.json
+index b8bdb53d..10bb3c28 100644
+--- a/quickshell/translations/settings_search_index.json
++++ b/quickshell/translations/settings_search_index.json
+@@ -3027,6 +3027,37 @@
+     "parentLabel": "Bar",
+     "conditionKey": "islandEnabled"
+   },
++  {
++    "section": "barMouseClickAction",
++    "label": "Click actions",
++    "tabIndex": 3,
++    "category": "General",
++    "keywords": [
++      "actions",
++      "anchored",
++      "bar",
++      "click",
++      "control center",
++      "cursor",
++      "general",
++      "launcher",
++      "middle",
++      "mouse",
++      "open",
++      "panel",
++      "popouts",
++      "right",
++      "settings",
++      "statusbar",
++      "taskbar",
++      "their",
++      "topbar",
++      "widget"
++    ],
++    "parentLabel": "Bar",
++    "icon": "mouse",
++    "description": "Anchored popouts open at the cursor instead of their widget"
++  },
+   {
+     "section": "barClickThrough",
+     "label": "Click through",
+@@ -3228,6 +3259,34 @@
+     "parentLabel": "Bar",
+     "conditionKey": "frameEnabled"
+   },
++  {
++    "section": "barClickActionFollowMouse",
++    "label": "Follow mouse",
++    "tabIndex": 3,
++    "category": "General",
++    "keywords": [
++      "anchor",
++      "anchored",
++      "bar",
++      "click",
++      "cursor",
++      "follow",
++      "general",
++      "mouse",
++      "open",
++      "panel",
++      "popout",
++      "popouts",
++      "position",
++      "statusbar",
++      "taskbar",
++      "their",
++      "topbar",
++      "widget"
++    ],
++    "parentLabel": "Bar",
++    "description": "Anchored popouts open at the cursor instead of their widget"
++  },
+   {
+     "section": "frameEnabled",
+     "label": "Frame",
+@@ -3441,6 +3500,35 @@
+     "description": "Drops bar gaps and rounding while a window is maximized",
+     "conditionKey": "windowRulesCapable"
+   },
++  {
++    "section": "barMiddleClickAction",
++    "label": "Middle click",
++    "tabIndex": 3,
++    "category": "General",
++    "keywords": [
++      "bar",
++      "choose",
++      "click",
++      "clicking",
++      "close",
++      "control center",
++      "does",
++      "empty",
++      "general",
++      "launcher",
++      "middle",
++      "mouse",
++      "panel",
++      "settings",
++      "space",
++      "statusbar",
++      "taskbar",
++      "topbar",
++      "what"
++    ],
++    "parentLabel": "Bar",
++    "description": "Choose what middle-clicking empty bar space does"
++  },
+   {
+     "section": "islandNotifications",
+     "label": "Notifications",
+@@ -3632,6 +3720,35 @@
+     "parentLabel": "Bar",
+     "conditionKey": "islandEnabled"
+   },
++  {
++    "section": "barRightClickAction",
++    "label": "Right click",
++    "tabIndex": 3,
++    "category": "General",
++    "keywords": [
++      "bar",
++      "choose",
++      "click",
++      "clicking",
++      "close",
++      "control center",
++      "does",
++      "empty",
++      "general",
++      "launcher",
++      "mouse",
++      "panel",
++      "right",
++      "settings",
++      "space",
++      "statusbar",
++      "taskbar",
++      "topbar",
++      "what"
++    ],
++    "parentLabel": "Bar",
++    "description": "Choose what right-clicking empty bar space does"
++  },
+   {
+     "section": "barScrollWheel",
+     "label": "Scroll wheel",
+-- 
+2.55.0
+

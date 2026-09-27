@@ -1,1 +1,7 @@
 for_window [class="flameshot"] floating enable, border none, sticky enable, move position 0 0, move to output HDMI-A-1
+
+# Float DMS windows (Settings, Polkit, etc.)
+for_window [app_id="com.danklinux.dms"] floating enable
+
+# Float DMS bar (may not work on all setups due to layer-shell)
+for_window [app_id="dms:bar"] floating enable

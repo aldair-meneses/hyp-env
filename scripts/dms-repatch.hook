@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = dms-shell
+
+[Action]
+Description = Re-applying DMS bar click actions patch
+When = PostTransaction
+Exec = /usr/local/bin/dms-repatch.sh
+NeedsTargets
