@@ -1,2 +1,2 @@
-for_window [class="^(KeePassXC|[Tt]hunar)$"] floating enable, resize set 900 600
-for_window [app_id="^(keepassxc|thunar)$"] floating enable, resize set 900 600
+for_window [class="^(KeePassXC|keepassxc|[Tt]hunar)$"] floating enable, resize set 900 600
+for_window [app_id="^(org.keepassxc.KeePassXC|keepassxc|thunar)$"] floating enable, resize set 900 600

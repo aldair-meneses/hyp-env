@@ -1,2 +1,2 @@
-focus_follows_mouse yes
+focus_follows_mouse always
 focus_on_window_activation focus

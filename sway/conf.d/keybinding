@@ -54,5 +54,5 @@ bindsym $mod+Shift+6 move container to workspace number 6, workspace number 6
 bindsym $mod+Shift+7 move container to workspace number 7, workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8, workspace number 8
 
-bindsym $mod+Shift+k exec keepassxc
+bindsym $mod+Shift+k exec $sway_scripts/bring-to-current.sh --app-id org.keepassxc.KeePassXC --class KeePassXC -- keepassxc
 bindsym $mod+Tab exec flatpak run com.tomjwatson.Emote
