@@ -23,7 +23,7 @@ bindsym $mod+Shift+s layout toggle stacking split
 bindsym $mod+l exec $ipc session lock
 bindsym $mod5+Tab exec $ipc panel-toggle clipboard
 
-bindsym Print exec flameshot gui
+bindsym Print exec $sway_scripts/flameshot-screen-focused.sh
 bindsym $mod+Shift+Print exec flameshot launcher
 
 bindsym $mod+Left focus left
