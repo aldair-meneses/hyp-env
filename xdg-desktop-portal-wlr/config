@@ -1,0 +1,7 @@
+[screencast]
+# Thumbnail picker instead of bare slurp crosshair.
+# snib shows live previews with window title + app_id, and separate
+# window/display lists with search (w/d, h/l, /, Enter, Esc).
+chooser_type=simple
+chooser_cmd=snib
+max_fps=30

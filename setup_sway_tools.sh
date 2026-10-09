@@ -2,12 +2,13 @@
 
 ./setup_common_tools.sh
 
-sudo pacman -S sway swaybg xdg-desktop-portal-wlr
+sudo pacman -S sway swaybg xdg-desktop-portal-wlr gtk4 gtk4-layer-shell
 
-yay -S libinput-gestures
+yay -S libinput-gestures snib-git
 
 ln -sf ~/.config/hyp-env/sway ~/.config/
 ln -sf ~/.config/hyp-env/libinput-gestures/config ~/.config/libinput-gestures.conf
+ln -sf ~/.config/hyp-env/xdg-desktop-portal-wlr ~/.config/
 
 mkdir -p ~/.config/uwsm
 ln -sf ~/.config/hyp-env/sway/uwsm-env-sway ~/.config/uwsm/env-sway
